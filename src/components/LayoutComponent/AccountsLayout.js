@@ -10,8 +10,7 @@ const AccountsLayout = () => {
 
     return (
         <div>
-            {
-                user?.role === "accounts" && <>
+            
 
                     <ul className="pt-4 pb-2 space-y-1 text-sm">
                         <li className="rounded-sm dark:bg-gray-800 dark:text-gray-50">
@@ -188,11 +187,7 @@ const AccountsLayout = () => {
                             </details>
                         </li>
                     </ul>
-
-
-
-                </>
-            }
+            
         </div>
     );
 };

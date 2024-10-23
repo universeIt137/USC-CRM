@@ -10,8 +10,6 @@ const HeadLayout = () => {
 
     return (
         <div>
-            {
-                user?.role === "head" && <>
                     <li><Link to="/dashboard/head-leads">Head Leads</Link></li>
                     <li><Link to="/dashboard/head-admission">Admission</Link></li>
                     <li><Link to="/dashboard/head-close">Close</Link></li>
@@ -22,8 +20,6 @@ const HeadLayout = () => {
                     <li><Link to='/dashboard/head-no-receive'>No Receive</Link></li>
                     <li><Link to='/dashboard/head-today-followUps'>Today FUp</Link></li>
                     <li><Link to={`/dashboard/head-pay-details`}>Payment</Link></li>
-                </>
-            }
         </div>
     );
 };

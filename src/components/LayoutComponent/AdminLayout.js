@@ -10,7 +10,7 @@ const AdminLayout = () => {
 
   return (
     <div>
-      {user?.role === "admin" && (
+      {/* {user?.role === "admin" && ( */}
         <>
           <ul className="pt-2 pb-4 space-y-1 text-sm">
             <li className="rounded-sm">
@@ -941,7 +941,7 @@ const AdminLayout = () => {
             </NavLink>
           </li>
         </>
-      )}
+      
     </div>
   );
 };
