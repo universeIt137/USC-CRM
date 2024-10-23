@@ -10,8 +10,7 @@ const UserLayout = () => {
 
     return (
         <div>
-            {
-                user?.role === "user" && <>
+                <>
                     <ul className="pt-2 pb-4 space-y-1 text-sm">
                         <li className="rounded-sm">
                             <Link rel="noopener noreferrer" to={`/dashboard`} className="flex items-center p-2 space-x-3 rounded-md">
@@ -107,7 +106,6 @@ const UserLayout = () => {
                     </ul>
 
                 </>
-            }
         </div>
     );
 };
