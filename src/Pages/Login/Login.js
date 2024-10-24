@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { userLoginApi } from "../../api-request/signinApi";
+import authStore, {  } from "../../api-request/signinApi";
 
 const Login = () => {
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
+
+  const {userLoginApi} = authStore();
 
   const handleLogin = async (e) => {
     e.preventDefault();

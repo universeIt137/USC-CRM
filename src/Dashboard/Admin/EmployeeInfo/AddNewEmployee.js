@@ -1,10 +1,14 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { AuthContext } from "../../../contexts/AuthProvider";
+import authStore from "../../../api-request/signinApi";
 
 const AddNewEmployee = () => {
   const { signup, signupData, signupError } = useContext(AuthContext);
+  const {userCreateApi} = authStore();
+
+  const [loader,setLoader] = useState(false);
 
   const navigate = useNavigate();
   // useEffect(() => {
@@ -15,14 +19,48 @@ const AddNewEmployee = () => {
   //     }
   // }, [user, navigate]);
 
-  if (signupData) {
-    navigate("/dashboard/employee/show-all");
+  // if (signupData) {
+  //   navigate("/dashboard/employee/show-all");
+  // }
+
+  // if (signupError) {
+  //   toast.error(signupError);
+  // }
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    const name = e.target.name.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const role = e.target.role.value;
+
+
+  const payload = {
+    name,
+    email,
+    password,
+    role,
   }
 
-  if (signupError) {
-    toast.error(signupError);
-  }
-
+  if(!email){
+    toast.error('Please enter email')
+    return
+  }else if (password.length === 0){
+    toast.error('Please enter password')
+    return
+  }else{
+      setLoader(true);
+      const res = await userCreateApi(payload);
+      setLoader(false);
+      if(res){
+        navigate("/dashboard/employee/show-all");
+        toast.success('User Created Successfully')
+      }else{
+        toast.error('Failed to create user')
+      }
+      
+  } 
+}
   return (
     <div className="h-[500px] flex justify-center items-center">
       
@@ -30,7 +68,7 @@ const AddNewEmployee = () => {
       <h2 className="text-2xl font-bold text-center border-b-2 pb-2">
         Create User Acount
       </h2>
-        <form onSubmit={signup}>
+        <form onSubmit={handleSubmit}>
           <div className="form-control w-full max-w-xs">
             <label className="label">
               <span className="label-text">Name</span>
