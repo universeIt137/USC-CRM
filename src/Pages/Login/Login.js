@@ -1,27 +1,51 @@
-import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../contexts/AuthProvider";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import authStore, {  } from "../../api-request/signinApi";
 
 const Login = () => {
-  const { login, user, loginError } = useContext(AuthContext);
   const navigate = useNavigate();
-  useEffect(() => {
-    // console.log(user);
-    if (user?._id) {
-      navigate("/dashboard");
-    }
-  }, [user, navigate]);
+  const [loader, setLoader] = useState(false);
 
-  useEffect(() => {
-    toast.error(loginError);
-  }, [loginError]);
+  const {userLoginApi} = authStore();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    if (!email) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+    if (!password) {
+      toast.error("Please enter a valid password");
+      return;
+    }
+
+    const payload = { email, password };
+    setLoader(true);
+
+    try {
+      const res = await userLoginApi(payload);
+      if (res) {
+        toast.success("User logged in successfully");
+        navigate("/dashboard");
+      } else {
+        toast.error("Invalid email or password");
+      }
+    } catch (error) {
+      toast.error("Login failed. Please try again.");
+    } finally {
+      setLoader(false);
+    }
+  };
 
   return (
     <div className="h-[400px] flex justify-center items-center">
       <div className="w-96 p-7">
         <h2 className="text-xl text-center">Login</h2>
-        <form onSubmit={login}>
+        <form onSubmit={handleLogin}>
           <div className="form-control w-full max-w-xs">
             <label className="label">
               <span className="label-text">Email</span>
@@ -32,7 +56,6 @@ const Login = () => {
               id="email"
               className="input input-bordered w-full max-w-xs"
             />
-            {/* <input type="text" className="input input-bordered w-full max-w-xs" /> */}
           </div>
 
           <div className="form-control w-full max-w-xs">
@@ -45,21 +68,45 @@ const Login = () => {
               id="password"
               className="input input-bordered w-full max-w-xs"
             />
-            {/* <input type="password" className="input input-bordered w-full max-w-xs" /> */}
-
             <label className="label">
-              <span className="label-text">Forgot Password ?</span>
+              <span className="label-text">Forgot Password?</span>
             </label>
           </div>
 
-          <input
-            className="btn btn-accent w-full text-white"
-            value="Login"
+          <button
             type="submit"
-          />
-          {/* <p>New to Doctors Portal <Link className='text-secondary' to="/signup">Create new Account</Link></p> */}
-          {/* <div className="divider">OR</div>
-                    <button onClick={handleGoogleLogin} className='btn btn-outline w-full'>CONTINUE WITH GOOGLE</button> */}
+            className={`btn btn-accent w-full text-white mt-4 ${loader ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            disabled={loader}
+          >
+            {loader ? (
+              <span className="flex items-center justify-center">
+                <svg
+                  className="animate-spin h-5 w-5 mr-2 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 100 8v4a8 8 0 01-8-8z"
+                  ></path>
+                </svg>
+                Logging in...
+              </span>
+            ) : (
+              "Login"
+            )}
+          </button>
         </form>
       </div>
     </div>

@@ -59,29 +59,29 @@ const AuthProvider = ({ children }) => {
     },
   });
 
-  useEffect(() => {
-    try {
-      if (!user?._id) {
-        axios
-          .get("https://demo-usc-crm-software.vercel.app/logged-user", {
-            headers: {
-              "content-type": "application/json",
-              authorization: localStorage.getItem("access_token"),
-            },
-          })
-          .then((res) => {
-            setUser(res.data?.user);
-            // console.log(res.data);
-            // localStorage.setItem(
-            //     "access_token",
-            //     `Bearer ${res.data.accessToken}`
-            // );
-          });
-      }
-    } catch (err) {
-      setUser({});
-    }
-  }, []);
+  // useEffect(() => {
+  //   try {
+  //     if (!user?._id) {
+  //       axios
+  //         .get("https://demo-usc-crm-software.vercel.app/logged-user", {
+  //           headers: {
+  //             "content-type": "application/json",
+  //             authorization: localStorage.getItem("access_token"),
+  //           },
+  //         })
+  //         .then((res) => {
+  //           setUser(res.data?.user);
+  //           // console.log(res.data);
+  //           // localStorage.setItem(
+  //           //     "access_token",
+  //           //     `Bearer ${res.data.accessToken}`
+  //           // );
+  //         });
+  //     }
+  //   } catch (err) {
+  //     setUser({});
+  //   }
+  // }, []);
 
   const login = (e) => {
     setLoginError("");
