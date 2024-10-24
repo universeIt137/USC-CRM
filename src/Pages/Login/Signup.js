@@ -2,10 +2,11 @@ import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider";
 import { toast } from "react-hot-toast";
+import userStore from "../../api-request/signinApi";
 
-const Signup = () => {
+const Signup = (userCreateApi) => {
 
-    const { signup, signupData, signupError } = useContext(AuthContext)
+    const { signup, signupData, signupError } = useContext(AuthContext);
 
 
     const navigate = useNavigate();
