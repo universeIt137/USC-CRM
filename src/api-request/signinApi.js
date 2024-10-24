@@ -4,13 +4,14 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 
 
-const baseUrl = `https://uiti-crm-server.vercel.app`
+const baseUrl = `https://uiti-crm-server.vercel.app`;
 
 const config = {
     headers: {
         'Authorization': `${localStorage.getItem("token")}`,
     },
 }
+
 
 const authStore = create((set) => ({
     userCreateApi: async (payload) => {
