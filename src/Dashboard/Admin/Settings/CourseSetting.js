@@ -1,20 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import courseStore from "../../../api-request/courseApi";
 
 const CourseSetting = () => {
   const [courseName, setCourseName] = useState();
-
-  const { courseCreateApi,allCourseDataApi,allCourseData } = courseStore();
-  
-  useEffect(()=>{
-    (async()=>{
-      await allCourseDataApi();
-    })()
-  },[]);
-
-  console.log(allCourseData);
 
   const handleCourse = (e) => {
     setCourseName(e.target.value);
@@ -36,7 +25,29 @@ const CourseSetting = () => {
       name: courseName,
     };
 
+    if (!courseName) {
+      toast.error(`Please write course name first`);
+      return;
+    }
 
+    const courseNameFound = coursesInfos?.find(
+      (singleCourse) => singleCourse.name === courseName
+    );
+
+    if (courseNameFound) {
+      toast.error(`Course "${courseName}" already added`);
+      setCourseName("");
+      return;
+    }
+
+    let confirmed = window.confirm(
+      `Are you sure you want to add ${courseName} to this course?`
+    );
+
+    if (!confirmed) {
+      setCourseName("");
+      return;
+    }
 
     fetch(`https://uiti-crm-server.vercel.app/course`, {
       method: "POST",
@@ -63,7 +74,9 @@ const CourseSetting = () => {
 
     fetch(`https://uiti-crm-server.vercel.app/delete-course/${id}`, {
       method: "DELETE",
-
+      headers: {
+        authorization: `${localStorage.getItem("token")}`,
+      },
     })
       .then((res) => {
         return res.json();
@@ -74,54 +87,24 @@ const CourseSetting = () => {
       });
   };
 
-  const [loader, setLoader] = useState(false);
-
-  const courseCreate = async (e) => {
-
-    e.preventDefault();
-    const name = e.target.name.value;
-
-    console.log(name)
-
-    const payload = {
-      name
-    };
-
-    if (!name) {
-      return toast.error("Please enter course name");
-    } else {
-      setLoader(true);
-      const res = await courseCreateApi(payload);
-      setLoader(false);
-      if (res) {
-        await allCourseDataApi();
-        toast.success(`Course ${name} added successfully`);
-      } else {
-        toast.error("Failed to add course");
-      }
-    }
-  }
-
   return (
     <div>
       <h2 className="text-2xl font-bold mt-4">Add Course Name !</h2>
-      <form onSubmit={courseCreate} >
-        <div className="m-2">
-          <input
-            // onChange={handleCourse}
-            type="text"
-            name="name"
-            placeholder="Type Course Name"
-            className="input input-accent  input-sm focus:ring-0 focus:outline-0 focus:input-sm  focus:border-2 w-full max-w-xs"
-          // value={courseName}
-          />
-          <button
-            className="btn btn-sm btn-accent m-2 text-black/[0.8] font-semibold"
-          >
-            Add Course Name
-          </button>
-        </div>
-      </form>
+      <div className="m-2">
+        <input
+          onChange={handleCourse}
+          type="text"
+          placeholder="Type Course Name"
+          className="input input-accent  input-sm focus:ring-0 focus:outline-0 focus:input-sm  focus:border-2 w-full max-w-xs"
+          value={courseName}
+        />
+        <button
+          onClick={handleCourseAdd}
+          className="btn btn-sm btn-accent m-2 text-black/[0.8] font-semibold"
+        >
+          Add Course Name
+        </button>
+      </div>
       <div className="max-w-2xl mx-auto mt-6">
         <div className="overflow-x-auto" style={{ height: "430px" }}>
           <form>
@@ -162,7 +145,6 @@ const CourseSetting = () => {
           </form>
         </div>
       </div>
-
     </div>
   );
 };
