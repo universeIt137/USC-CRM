@@ -29,7 +29,7 @@ const EnrollCourse = () => {
   const [allStudents, setAllStudents] = useState([]);
 
   useEffect(() => {
-    fetch("https://demo-usc-crm-software.vercel.app/students")
+    fetch("https://uiti-crm-server.vercel.app/students")
       .then((response) => response.json())
       .then((data) => {
         setAllStudents(data);
@@ -40,9 +40,10 @@ const EnrollCourse = () => {
     queryKey: ["coursesName"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/course`
+        `https://uiti-crm-server.vercel.app/course`
       );
       const data = await res.json();
+      console.log("course name is", data.users )
       return data;
     },
   });
@@ -52,13 +53,15 @@ const EnrollCourse = () => {
   };
 
   const { data: batchsName = [] } = useQuery({
+
     queryKey: ["batchsName"],
     queryFn: async () => {
-      const res = await fetch(`https://demo-usc-crm-software.vercel.app/batch`);
+      const res = await fetch(`https://uiti-crm-server.vercel.app/batch`);
       const data = await res.json();
       return data;
     },
   });
+  console.log(batchName);
 
   const handleSelectUser = (e) => {
     setEmployeeName(e.target.value);
@@ -67,7 +70,7 @@ const EnrollCourse = () => {
   const { data: allUser = [] } = useQuery({
     queryKey: ["allUser"],
     queryFn: async () => {
-      const res = await fetch(`https://demo-usc-crm-software.vercel.app/users`);
+      const res = await fetch(`https://uiti-crm-server.vercel.app/users`);
       const data = await res.json();
 
       const uData = data.users.filter((user) => user.role === "user");
@@ -76,7 +79,6 @@ const EnrollCourse = () => {
     },
   });
 
-  console.log(usersName);
 
   const handleSelectHead = (e) => {
     setHeadName(e.target.value);
@@ -85,8 +87,9 @@ const EnrollCourse = () => {
   const { data: headsName = [] } = useQuery({
     queryKey: ["headsName"],
     queryFn: async () => {
-      const res = await fetch(`https://demo-usc-crm-software.vercel.app/heads`);
+      const res = await fetch(`https://uiti-crm-server.vercel.app/head`);
       const data = await res.json();
+      console.log("head data is" , data.users )
       return data;
     },
   });
@@ -152,12 +155,18 @@ const EnrollCourse = () => {
       headName,
     };
 
+    console.log(
+      courseName,
+      batchName,
+      employeeName,
+      headName,)
+
     // console.log(name, email, phone, fristInstallment, secondInstallment, thirdInstallment, nextInstallmentDate, fristPaymentAccounts, totalInstallment, courseName, batchName, employeeName, headName,);
-    fetch(`https://demo-usc-crm-software.vercel.app/add-admissions`, {
+    fetch(`https://uiti-crm-server.vercel.app/add-admissions`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        authorization: localStorage.getItem("access_token"),
+        authorization: localStorage.getItem("token"),
       },
       body: JSON.stringify(personalData),
     })
@@ -188,7 +197,7 @@ const EnrollCourse = () => {
                 Select Course Name
               </option>
               {coursesName?.users?.map((user) => (
-                <option key={user._id} value={user.name}>
+                <option key={user._id} value={user?._id}>
                   {user.name}
                 </option>
               ))}
@@ -202,8 +211,8 @@ const EnrollCourse = () => {
               <option disabled selected>
                 Select Batch Name
               </option>
-              {filterBatchName?.map((user) => (
-                <option key={user._id} value={user._id}>
+              {batchsName?.users && batchsName?.users.map((user) => (
+                <option key={user.id} value={user?._id}>
                   {user.name}
                 </option>
               ))}
@@ -220,7 +229,7 @@ const EnrollCourse = () => {
               {usersName?.map(
                 (user) =>
                   user.role !== "admin" && (
-                    <option key={user._id} value={user._id}>
+                    <option key={user.id} value={user?._id}>
                       {user.name}
                     </option>
                   )
@@ -238,8 +247,8 @@ const EnrollCourse = () => {
               <option disabled selected>
                 Select Head Name
               </option>
-              {headsName?.heads?.map((user) => (
-                <option key={user._id} value={user._id}>
+              {headsName?.users?.map((user) => (
+                <option key={user?._id} value={user?._id}>
                   {user.name}
                 </option>
               ))}
