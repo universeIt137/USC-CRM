@@ -12,9 +12,9 @@ const BatchSetting = () => {
   const { data: batchsInfos = [], refetch } = useQuery({
     queryKey: ["batchsInfos"],
     queryFn: async () => {
-      const res = await fetch(`https://demo-usc-crm-software.vercel.app/batch`);
+      const res = await fetch(`https://uiti-crm-server.vercel.app/batch`);
       const data = await res.json();
-      return data;
+      return data.users || []; // Ensure you return an array
     },
   });
 
@@ -26,7 +26,7 @@ const BatchSetting = () => {
       return;
     }
 
-    fetch(`https://demo-usc-crm-software.vercel.app/delete-batch/${id}`, {
+    fetch(`https://uiti-crm-server.vercel.app/delete-batch/${id}`, {
       method: "DELETE",
       headers: {
         authorization: `bearer ${localStorage.getItem("accessToken")}`,
@@ -42,18 +42,16 @@ const BatchSetting = () => {
   };
 
   const handleBatchAdd = () => {
-    const addBatchName = {
-      name: batchName,
-    };
+    const addBatchName = { name: batchName };
 
     if (!batchName) {
-      toast.error(`Please write course name first`);
+      toast.error("Please write course name first");
       return;
     }
 
-    const batchNameFound = batchsInfos?.find(
-      (singleCourse) => singleCourse.name === batchName
-    );
+    // Ensure batchsInfos is an array before calling .find()
+    const batchNameFound = Array.isArray(batchsInfos) &&
+      batchsInfos.find((singleCourse) => singleCourse.name === batchName);
 
     if (batchNameFound) {
       toast.error(`Course "${batchName}" already added`);
@@ -61,7 +59,7 @@ const BatchSetting = () => {
       return;
     }
 
-    let confirmed = window.confirm(
+    const confirmed = window.confirm(
       `Are you sure you want to add ${batchName} to this course?`
     );
 
@@ -70,11 +68,11 @@ const BatchSetting = () => {
       return;
     }
 
-    fetch(`https://demo-usc-crm-software.vercel.app/batch`, {
+    fetch(`https://uiti-crm-server.vercel.app/batch`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        authorization: localStorage.getItem("access_token"),
+        authorization: localStorage.getItem("token"),
       },
       body: JSON.stringify(addBatchName),
     })
@@ -117,8 +115,8 @@ const BatchSetting = () => {
               </thead>
 
               <tbody className="w-fit text-xs">
-                {batchsInfos?.users?.length > 0 &&
-                  batchsInfos?.users?.map((online, i) => (
+                {batchsInfos?.length > 0 &&
+                  batchsInfos?.map((online, i) => (
                     <tr key={online._id}>
                       <th className="p-1 border-2">{i + 1}</th>
                       <td className="p-1 border-2">
