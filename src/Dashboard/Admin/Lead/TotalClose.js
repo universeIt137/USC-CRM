@@ -13,9 +13,10 @@ const TotalClose = () => {
   const tableRef = useRef(null);
 
   useEffect(() => {
-    fetch("https://demo-usc-crm-software.vercel.app/leads?close=true")
+    fetch("https://uiti-crm-server.vercel.app/leads?close=true")
       .then((response) => response.json())
       .then((data) => {
+        console.log(data)
         setFilterData(data);
         setTotalClose(data);
       });
@@ -101,7 +102,7 @@ const TotalClose = () => {
       return;
     }
 
-    fetch(`https://demo-usc-crm-software.vercel.app/delete/${close}`, {
+    fetch(`https://uiti-crm-server.vercel.app/delete/${close}`, {
       method: "DELETE",
       headers: {
         authorization: `bearer ${localStorage.getItem("accessToken")}`,
@@ -110,7 +111,7 @@ const TotalClose = () => {
       .then((res) => res.json())
       .then((data) => {
         toast.success(`Leads ${user.name} deleted successfully`);
-        fetch("https://demo-usc-crm-software.vercel.app/leads?close=true")
+        fetch("https://uiti-crm-server.vercel.app/leads?close=true")
           .then((res) => res.json())
           .then((updatedData) => {
             setFilterData(updatedData);
@@ -334,7 +335,7 @@ const TotalClose = () => {
                       <tr key={close._id}>
                         <th className="p-1 border-2">{i + 1}</th>
                         <td className="p-1 border-2">
-                          {close.date.slice(0, 10)}
+                          {close.date}
                         </td>
                         <td className="p-1 border-2">{close.course.name}</td>
                         <td className="p-1 border-2">{close.batch.name}</td>

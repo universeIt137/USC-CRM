@@ -4,7 +4,7 @@ export const getCourseCollectionData = async () => {
   let response;
   try {
     response = await axios.get(
-      "https://demo-usc-crm-software.vercel.app/leads?admission=true&admissionStatus=true"
+      "https://uiti-crm-server.vercel.app/leads?admission=true&admissionStatus=true"
     );
   } catch (error) {
     console.error(error);

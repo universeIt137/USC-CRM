@@ -9,7 +9,7 @@ const AllStudents = () => {
   const [allStudents, setAllStudents] = useState([]);
 
   useEffect(() => {
-    fetch("https://demo-usc-crm-software.vercel.app/students")
+    fetch("https://uiti-crm-server.vercel.app/students")
       .then((response) => response.json())
       .then((data) => {
         setAllStudents(data);

@@ -10,7 +10,7 @@ const UserSetting = () => {
   const { data: usersName = [], refetch } = useQuery({
     queryKey: ["usersName"],
     queryFn: async () => {
-      const res = await fetch(`https://demo-usc-crm-software.vercel.app/users`);
+      const res = await fetch(`https://uiti-crm-server.vercel.app/users`);
       const data = await res.json();
       return data;
     },
@@ -26,10 +26,10 @@ const UserSetting = () => {
       return;
     }
 
-    fetch(`https://demo-usc-crm-software.vercel.app/delete-user/${leads}`, {
+    fetch(`https://uiti-crm-server.vercel.app/delete-user/${leads}`, {
       method: "DELETE",
       headers: {
-        authorization: `bearer ${localStorage.getItem("accessToken")}`,
+        authorization: `${localStorage.getItem("token")}`,
       },
     })
       .then((res) => {
