@@ -59,29 +59,29 @@ const AuthProvider = ({ children }) => {
     },
   });
 
-  // useEffect(() => {
-  //   try {
-  //     if (!user?._id) {
-  //       axios
-  //         .get("https://demo-usc-crm-software.vercel.app/logged-user", {
-  //           headers: {
-  //             "content-type": "application/json",
-  //             authorization: localStorage.getItem("access_token"),
-  //           },
-  //         })
-  //         .then((res) => {
-  //           setUser(res.data?.user);
+  useEffect(() => {
+    try {
+      if (!user?._id) {
+        axios
+          .get("https://demo-usc-crm-software.vercel.app/logged-user", {
+            headers: {
+              "content-type": "application/json",
+              authorization: localStorage.getItem("token"),
+            },
+          })
+          .then((res) => {
+            setUser(res.data?.user);
   //           // console.log(res.data);
   //           // localStorage.setItem(
   //           //     "access_token",
   //           //     `Bearer ${res.data.accessToken}`
   //           // );
-  //         });
-  //     }
-  //   } catch (err) {
-  //     setUser({});
-  //   }
-  // }, []);
+          });
+      }
+    } catch (err) {
+      setUser({});
+    }
+  }, []);
 
   const login = (e) => {
     setLoginError("");
@@ -105,7 +105,7 @@ const AuthProvider = ({ children }) => {
       })
       .then((res) => {
         // console.log(res.data);
-        localStorage.setItem("access_token", `Bearer ${res.data.accessToken}`);
+        localStorage.setItem("token", `${res.data.token}`);
         setUser(res.data?.user);
       })
       .catch((err) => {
@@ -157,7 +157,7 @@ const AuthProvider = ({ children }) => {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        authorization: localStorage.getItem("access_token"),
+        authorization: localStorage.getItem("token"),
       },
       body: JSON.stringify(user),
     })

@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../../contexts/AuthProvider";
 import { DownloadTableExcel } from "react-export-table-to-excel";
@@ -12,395 +11,193 @@ const TotalAdmission = () => {
   const [totalAdmission, setTotalAdmission] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [search, setSearch] = useState("");
-
+  const [selectedValue, setSelectedValue] = useState([]);
   const tableRef = useRef(null);
 
+  // Fetching data on component mount
   useEffect(() => {
-    fetch("https://demo-usc-crm-software.vercel.app/leads?admission=true")
+    fetch("https://uiti-crm-server.vercel.app/leads?admission=true")
       .then((response) => response.json())
       .then((data) => {
         setFilterData(data);
         setTotalAdmission(data);
-      });
+      })
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  // -----------------Filter Start--------------------
-
-  const [selectedValue, setSelectedValue] = useState([]);
-  // console.log(selectedValue)
-
-  const uniqueCourse = [
-    ...new Set(totalAdmission?.map((user) => user?.course?.name)),
-  ];
-
-  const uniqueBatch = [
-    ...new Set(selectedValue?.map((user) => user?.batch?.name)),
-  ];
-
-  const uniqueHead = [
-    ...new Set(selectedValue?.map((user) => user?.head?.name)),
-  ];
-
-  const uniqueUser = [
-    ...new Set(selectedValue?.map((user) => user?.user?.name)),
-  ];
-
-  function handleCourseChange(event) {
-    const couseSelectedValue = event.target.value;
-    const fData = totalAdmission?.filter(
-      (si) => si.course.name === couseSelectedValue
-    );
-    setFilterData(fData);
-    setSelectedValue(fData);
-  }
-
-  function handleBatchChange(event) {
-    const selectedBatchValue = event.target.value;
-    const fData = totalAdmission?.filter(
-      (si) => si.batch.name === selectedBatchValue
-    );
-    setFilterData(fData);
-  }
-
-  function handleHeadChange(event) {
-    const selectedHeadValue = event.target.value;
-    const fData = totalAdmission?.filter(
-      (si) => si.head.name === selectedHeadValue
-    );
-    setFilterData(fData);
-  }
-
-  function handleUserChange(event) {
-    const selectedUserValue = event.target.value;
-    const fData = totalAdmission?.filter(
-      (si) => si.user.name === selectedUserValue
-    );
-    setFilterData(fData);
-  }
-
-  // -----------------Filter End--------------------
-
-  // -------------Date wise Filter Start--------------------
+  // Helper function to format dates
   function formatedDate(date) {
     return new Date(date).toISOString().slice(0, -14);
   }
 
-  const handleInputChange = (event) => {
+  // ----------------- Filter Logic --------------------
+  const uniqueCourse = [...new Set(totalAdmission.map((user) => user?.course?.name))];
+  const uniqueBatch = [...new Set(selectedValue.map((user) => user?.batch?.name))];
+  const uniqueHead = [...new Set(selectedValue.map((user) => user?.head?.name))];
+  const uniqueUser = [...new Set(selectedValue.map((user) => user?.user?.name))];
+
+  const handleFilterChange = (event, type) => {
     const value = event.target.value;
-    // console.log(value);
-    const fiData = totalAdmission.filter(
-      (si) => formatedDate(si.createdAt) === value
-    );
-    setFilterData(fiData);
-    // console.log(fiData);
+    const fData = totalAdmission.filter((item) => item[type]?.name === value);
+    setFilterData(fData);
+    if (type === "course") setSelectedValue(fData);
   };
-  // -------------Date wise Filter End--------------------
+
+  const handleDateFilter = (event) => {
+    const value = event.target.value;
+    const fiData = totalAdmission.filter((si) => formatedDate(si.createdAt) === value);
+    setFilterData(fiData);
+  };
 
   const handleDelete = (leads) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this item?"
     );
-    if (!confirmDelete) {
-      return;
-    }
+    if (!confirmDelete) return;
 
-    fetch(`https://demo-usc-crm-software.vercel.app/delete/${leads}`, {
+    fetch(`https://uiti-crm-server.vercel.app/delete/${leads}`, {
       method: "DELETE",
       headers: {
-        authorization: `bearer ${localStorage.getItem("accessToken")}`,
+        authorization: `${localStorage.getItem("token")}`,
       },
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then(() => {
         toast.success(`Leads ${user.name} deleted successfully`);
-        fetch("https://demo-usc-crm-software.vercel.app/leads?admission=true")
+        fetch("https://uiti-crm-server.vercel.app/leads?admission=true")
           .then((res) => res.json())
-          .then((updatedData) => {
-            setFilterData(updatedData);
-          })
-          .catch((error) => {
-            console.error("Update request failed:", error);
-            toast.error("An error occurred while updating the API.");
-          });
+          .then((updatedData) => setFilterData(updatedData))
+          .catch((error) => toast.error("Error updating data."));
       })
-      .catch((error) => {
-        console.error("Delete request failed:", error);
-        toast.error("An error occurred while deleting the item.");
-      });
+      .catch(() => toast.error("Error deleting the item."));
   };
 
   return (
     <div className="mx-2 my-2">
-      <nav
-        aria-label="breadcrumb"
-        className="w-full p-4 dark:bg-gray-800 dark:text-gray-100"
-      >
+      <nav aria-label="breadcrumb" className="w-full p-4 dark:bg-gray-800">
         <ol className="flex h-8 space-x-2">
           <li className="flex items-center">
-            <a
-              rel="noopener noreferrer"
-              href="#"
-              title="Back to homepage"
-              className="hover:underline"
-            >
+            <Link to="#" className="hover:underline">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
-                className="w-5 h-5 pr-1 dark:text-gray-400"
+                className="w-5 h-5 pr-1"
               >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
               </svg>
-            </a>
+            </Link>
           </li>
           <li className="flex items-center space-x-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 32 32"
-              aria-hidden="true"
-              fill="currentColor"
-              className="w-2 h-2 mt-1 transform rotate-90 fill-current dark:text-gray-600"
-            >
-              <path d="M32 30.031h-32l16-28.061z"></path>
-            </svg>
-            <a
-              rel="noopener noreferrer"
-              href="#"
-              className="flex items-center px-1 capitalize hover:underline"
-            >
-              Dashboard
-            </a>
+            <Link to="#" className="hover:underline">Dashboard</Link>
           </li>
           <li className="flex items-center space-x-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 32 32"
-              aria-hidden="true"
-              fill="currentColor"
-              className="w-2 h-2 mt-1 transform rotate-90 fill-current dark:text-gray-600"
-            >
-              <path d="M32 30.031h-32l16-28.061z"></path>
-            </svg>
-            <a
-              rel="noopener noreferrer"
-              href="#"
-              className="flex items-center px-1 capitalize hover:underline"
-            >
-              Total Admission
-            </a>
+            <span>Total Admission</span>
           </li>
         </ol>
       </nav>
 
-      {/* <h3 className="text-2xl mb-3">Total Admission Students : {totalAdmission.length}</h3> */}
-
       <div className="flex justify-end">
-        <div className=" btn btn-xs">
-          <p className="mr-2">
-            <AiOutlineUserAdd></AiOutlineUserAdd>
-          </p>
-
+        <div className="btn btn-xs">
+          <AiOutlineUserAdd className="mr-2" />
           <Link to="/dashboard/add-admissions">Add New Admission</Link>
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center">
-        <div className="form-control mx-2">
-          <label className="label">
-            <span className="label-text">Date</span>
-          </label>
+      <div className="flex flex-wrap items-center gap-4">
+  {/* Date Input */}
+        <div className="form-control mx-2 w-60">
+          <label className="label-text mb-1">Date</label>
           <input
-            onChange={handleInputChange}
-            name="FirstFollowup"
             type="date"
-            className="input input-sm w-full input-bordered"
+            onChange={handleDateFilter}
+            className="input input-sm input-bordered focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </div>
 
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Course Name</span>
-          </label>
+        {/* Course Name Dropdown */}
+        <div className="form-control mx-2 w-60">
+          <label className="label-text mb-1">Course Name</label>
           <select
-            onChange={handleCourseChange}
-            className="select select-sm w-full border-gray-400"
+            onChange={(e) => handleFilterChange(e, "course")}
+            className="select select-sm border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           >
             <option>Course Name</option>
-            {uniqueCourse.map((value) => (
-              <option key={value._id} value={value}>
-                {value}
+            {uniqueCourse.map((course) => (
+              <option key={course} value={course}>
+                {course}
               </option>
             ))}
           </select>
         </div>
 
-        <div className="form-control mx-2">
-          <label className="label">
-            <span className="label-text">Batch Name</span>
-          </label>
-          <select
-            onChange={handleBatchChange}
-            className="select select-sm w-full border-gray-400"
-          >
-            <option>Batch Name</option>
-            {uniqueBatch.map((value) => (
-              <option key={value._id} value={value}>
-                {value}
-              </option>
-            ))}
-          </select>
-          {/* <input list="data" ref={batchRef} className='input input-bordered input-sm' placeholder="Batch Name"></input>
-                    <datalist id='data'>
-                        {
-                            batchsName?.users?.map((user) =>
-                                // user.role !== 'admin' &&
-                                <option
-                                    key={user._id}
-                                    value={user.name}>
-                                    {user.name}
-                                </option>
-                            )
-                        }
-                    </datalist> */}
-        </div>
-
-        <div className="form-control mx-2">
-          <label className="label">
-            <span className="label-text">Head Name</span>
-          </label>
-          <select
-            onChange={handleHeadChange}
-            className="select select-sm w-full border-gray-400"
-            required
-          >
-            <option>Head Name</option>
-            {uniqueHead.map((value) => (
-              <option key={value._id} value={value}>
-                {value}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="form-control mx-2">
-          <label className="label">
-            <span className="label-text">User Name</span>
-          </label>
-          <select
-            onChange={handleUserChange}
-            className="select select-sm w-full border-gray-400"
-            required
-          >
-            <option>User Name</option>
-            {uniqueUser.map((value) => (
-              <option key={value._id} value={value}>
-                {value}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* <div className='mt-8'>
-                    <button
-                        onClick={handleSearch}
-                        className="btn btn-sm btn-primary text-white bg-green-500"
-                    >
-                        Filter
-                    </button>
-                </div> */}
-
-        <div className="mt-10 mx-2">
+        {/* Search Input */}
+        <div className="form-control mx-2 w-60">
+          <label className="label-text mb-1">Search</label>
           <input
             type="text"
-            className="input input-bordered input-sm w-full max-w-xs mb-3"
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search By Name, Phone, Email"
-          ></input>
+            className="input input-sm input-bordered focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            placeholder="Search by Name, Phone, Email"
+          />
         </div>
 
-        <DownloadTableExcel
-          filename="users table"
-          sheet="users"
-          currentTableRef={tableRef.current}
-        >
-          <button className="mt-6 btn btn-sm btn-outline">
-            <FaFileDownload className="inline-block"></FaFileDownload>
-          </button>
-        </DownloadTableExcel>
+        {/* Export Button */}
+        <div className="mt-6">
+          <DownloadTableExcel filename="admissions" currentTableRef={tableRef.current}>
+            <button className="btn btn-sm">
+              <FaFileDownload />
+            </button>
+          </DownloadTableExcel>
+        </div>
       </div>
+
 
       <div className="p-2">
         <div className="overflow-x-auto" style={{ height: "430px" }}>
-          <form>
-            <table className="table w-full">
-              <thead
-                className="text-xs sticky top-0 bg-slate-300"
-                style={{ width: "1200px" }}
-              >
-                <tr>
-                  <th className="p-1 border-2">#</th>
-                  <th className="p-1 border-2">Date</th>
-                  <th className="p-1 border-2">C N</th>
-                  <th className="p-1 border-2">B N</th>
-                  <th className="p-1 border-2">U N</th>
-                  <th className="p-1 border-2">H N</th>
-                  <th className="p-1 border-2">Name</th>
-                  <th className="p-1 border-2">Phone</th>
-                  <th className="p-1 border-2">Email</th>
-                  <th className="p-1 border-2">Action</th>
-                </tr>
-              </thead>
-
-              <tbody className="w-fit text-xs">
-                {filterData.length > 0 &&
-                  filterData
-                    ?.filter((admissions) => {
-                      return search?.toLowerCase() === ""
-                        ? admissions
-                        : admissions.name
-                            .toLowerCase()
-                            .includes(search?.toLowerCase()) ||
-                            admissions.email
-                              ?.toLowerCase()
-                              .includes(search?.toLowerCase()) ||
-                            admissions.phone
-                              .toLowerCase()
-                              .includes(search?.toLowerCase());
-                    })
-                    ?.map((admissions, i) => (
-                      <tr key={admissions._id}>
-                        <th className="p-1 border-2">{i + 1}</th>
-                        <td className="p-1 border-2">
-                          {admissions.date.slice(0, 10)}
-                        </td>
-                        <td className="p-1 border-2">
-                          {admissions?.course?.name}
-                        </td>
-                        <td className="p-1 border-2">
-                          {admissions?.batch?.name}
-                        </td>
-                        <td className="p-1 border-2">
-                          {admissions?.user?.name}
-                        </td>
-                        <td className="p-1 border-2">
-                          {admissions?.head?.name}
-                        </td>
-                        <td className="p-1 border-2">{admissions?.name}</td>
-                        <td className="p-1 border-2">{admissions?.phone}</td>
-                        <td className="p-1 border-2">{admissions?.email}</td>
-                        <td className="p-1 border-2">
-                          <p
-                            className="btn btn-xs btn-denger"
-                            onClick={() => handleDelete(admissions._id)}
-                          >
-                            Delete
-                          </p>
-                        </td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
-          </form>
+          <table className="table w-full" ref={tableRef}>
+            <thead className="sticky top-0 bg-slate-300">
+              <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Course</th>
+                <th>Batch</th>
+                <th>User</th>
+                <th>Head</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filterData
+                .filter((item) =>
+                  `${item.name} ${item.phone} ${item.email}`.toLowerCase().includes(search.toLowerCase())
+                )
+                .map((lead, index) => (
+                  <tr key={lead._id}>
+                    <td>{index + 1}</td>
+                    <td>{formatedDate(lead.createdAt)}</td>
+                    <td>{lead.course.name}</td>
+                    <td>{lead.batch.name}</td>
+                    <td>{lead.user.name}</td>
+                    <td>{lead.head.name}</td>
+                    <td>{lead.name}</td>
+                    <td>{lead.phone}</td>
+                    <td>{lead.email}</td>
+                    <td>
+                      <button
+                        onClick={() => handleDelete(lead._id)}
+                        className="btn btn-sm btn-danger"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
