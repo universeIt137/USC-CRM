@@ -18,7 +18,7 @@ const AuthProvider = ({ children }) => {
     queryKey: ["loansData"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/loan?loanReceiveStatus=true`
+        `https://uiti-crm-server.vercel.app/loan?loanReceiveStatus=true`
       );
       const data = await res.json();
       setFilterData(data);
@@ -30,7 +30,7 @@ const AuthProvider = ({ children }) => {
     queryKey: ["loansPayData"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/loan?loanProvideStatus=true`
+        `https://uiti-crm-server.vercel.app/loan?loanProvideStatus=true`
       );
       const data = await res.json();
       return data;
@@ -41,7 +41,7 @@ const AuthProvider = ({ children }) => {
     queryKey: ["payLoans"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/loan/pay`
+        `https://uiti-crm-server.vercel.app/loan/pay`
       );
       const data = await res.json();
       return data;
@@ -52,7 +52,7 @@ const AuthProvider = ({ children }) => {
     queryKey: ["revLoans"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/loan/rev`
+        `https://uiti-crm-server.vercel.app/loan/rev`
       );
       const data = await res.json();
       return data;
@@ -63,7 +63,7 @@ const AuthProvider = ({ children }) => {
     try {
       if (!user?._id) {
         axios
-          .get("https://demo-usc-crm-software.vercel.app/logged-user", {
+          .get("https://uiti-crm-server.vercel.app/logged-user", {
             headers: {
               "content-type": "application/json",
               authorization: localStorage.getItem("token"),
@@ -71,11 +71,6 @@ const AuthProvider = ({ children }) => {
           })
           .then((res) => {
             setUser(res.data?.user);
-  //           // console.log(res.data);
-  //           // localStorage.setItem(
-  //           //     "access_token",
-  //           //     `Bearer ${res.data.accessToken}`
-  //           // );
           });
       }
     } catch (err) {
@@ -99,7 +94,7 @@ const AuthProvider = ({ children }) => {
     }
 
     axios
-      .post("https://demo-usc-crm-software.vercel.app/login", {
+      .post("https://uiti-crm-server.vercel.app/login", {
         email,
         password,
       })
@@ -153,7 +148,7 @@ const AuthProvider = ({ children }) => {
     // console.log(name, email, role, password);
     const user = { name: name, email: email, role: role, password: password };
 
-    fetch(`https://demo-usc-crm-software.vercel.app/users`, {
+    fetch(`https://uiti-crm-server.vercel.app/users`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

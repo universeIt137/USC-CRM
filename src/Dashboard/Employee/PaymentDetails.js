@@ -23,7 +23,7 @@ const PaymentDetails = () => {
 
   const refetchUpdateData = async () => {
     const res = await fetch(
-      `https://demo-usc-crm-software.vercel.app/leads?admission=true&admissionStatus=true&user.name=${user.name}`
+      `https://uiti-crm-server.vercel.app/leads?admission=true&admissionStatus=true&user.name=${user.name}`
     );
     const data = await res.json();
 

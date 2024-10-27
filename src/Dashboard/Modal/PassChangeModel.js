@@ -19,8 +19,8 @@ const PassChangeModel = ({ singleLead, setSLead, refetch }) => {
     // console.log(user)
 
     axios
-      .patch(
-        `https://demo-usc-crm-software.vercel.app/update-pass/${singleLead._id}`,
+      .put(
+        `https://uiti-crm-server.vercel.app/update-pass/${singleLead._id}`,
         user
       )
       .then((data) => {
