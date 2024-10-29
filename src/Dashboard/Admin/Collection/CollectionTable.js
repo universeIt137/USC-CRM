@@ -20,11 +20,11 @@ const CollectionTable = ({ filterData, refetch, showAction }) => {
     }
 
     fetch(
-      `https://demo-usc-crm-software.vercel.app/delete-collection/${leads._id}`,
+      `https://uiti-crm-server.vercel.app/delete-collection/${leads._id}`,
       {
         method: "DELETE",
         headers: {
-          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+          authorization: `${localStorage.getItem("token")}`,
         },
       }
     )

@@ -29,7 +29,7 @@ const CollectionModal = ({ singlcollectionData, setShowModal, refetch }) => {
     queryKey: ["payGetwayName"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/pay-getway`
+        `https://uiti-crm-server.vercel.app/pay-getway`
       );
       const data = await res.json();
       return data;
@@ -40,7 +40,7 @@ const CollectionModal = ({ singlcollectionData, setShowModal, refetch }) => {
     queryKey: ["allPurposeName"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/collection-head`
+        `https://uiti-crm-server.vercel.app/collection-head`
       );
       const data = await res.json();
 
@@ -61,12 +61,12 @@ const CollectionModal = ({ singlcollectionData, setShowModal, refetch }) => {
     };
 
     fetch(
-      `https://demo-usc-crm-software.vercel.app/update-collection/${singlcollectionData._id}`,
+      `https://uiti-crm-server.vercel.app/update-collection/${singlcollectionData._id}`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+          authorization: `${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(collectionData),
       }
