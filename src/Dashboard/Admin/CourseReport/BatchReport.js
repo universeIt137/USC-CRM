@@ -41,7 +41,7 @@ const PayReport = () => {
   const { data: batchsName = [] } = useQuery({
     queryKey: ["batchsName"],
     queryFn: async () => {
-      const res = await fetch(`https://demo-usc-crm-software.vercel.app/batch`);
+      const res = await fetch(`https://uiti-crm-server.vercel.app/batch`);
       const data = await res.json();
       return data;
     },

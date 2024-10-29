@@ -15,7 +15,7 @@ const OnlineStudents = () => {
 
   useEffect(() => {
     fetch(
-      "https://demo-usc-crm-software.vercel.app/leads?onlineInterested=true"
+      "https://uiti-crm-server.vercel.app/leads?onlineInterested=true"
     )
       .then((response) => response.json())
       .then((data) => {
@@ -104,17 +104,17 @@ const OnlineStudents = () => {
       return;
     }
 
-    fetch(`https://demo-usc-crm-software.vercel.app/delete/${online}`, {
+    fetch(`https://uiti-crm-server.vercel.app/delete/${online}`, {
       method: "DELETE",
       headers: {
-        authorization: `bearer ${localStorage.getItem("accessToken")}`,
+        authorization: `bearer ${localStorage.getItem("token")}`,
       },
     })
       .then((res) => res.json())
       .then((data) => {
         toast.success(`Leads ${user.name} deleted successfully`);
         fetch(
-          "https://demo-usc-crm-software.vercel.app/leads?onlineInterested=true"
+          "https://uiti-crm-server.vercel.app/leads?onlineInterested=true"
         )
           .then((res) => res.json())
           .then((data) => {
@@ -338,7 +338,7 @@ const OnlineStudents = () => {
                       <tr key={online._id}>
                         <th className="p-1 border-2">{i + 1}</th>
                         <td className="p-1 border-2">
-                          {online.date.slice(0, 10)}
+                          {online.date}
                         </td>
                         <td className="p-1 border-2">{online.course.name}</td>
                         <td className="p-1 border-2">{online.batch.name}</td>
