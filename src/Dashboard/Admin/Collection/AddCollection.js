@@ -10,7 +10,7 @@ const AddCollection = () => {
     queryKey: ["expenseHeadName"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/collection-head`
+        `https://uiti-crm-server.vercel.app/collection-head`
       );
       const data = await res.json();
       return data;
@@ -21,7 +21,7 @@ const AddCollection = () => {
     queryKey: ["payGetwayName"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/pay-getway`
+        `https://uiti-crm-server.vercel.app/pay-getway`
       );
       const data = await res.json();
       return data;
@@ -50,11 +50,11 @@ const AddCollection = () => {
       discription,
     };
 
-    fetch(`https://demo-usc-crm-software.vercel.app/collection`, {
+    fetch(`https://uiti-crm-server.vercel.app/collection`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        authorization: localStorage.getItem("access_token"),
+        authorization: localStorage.getItem("token"),
       },
       body: JSON.stringify(personalData),
     })
