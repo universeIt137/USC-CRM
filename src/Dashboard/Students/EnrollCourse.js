@@ -43,7 +43,6 @@ const EnrollCourse = () => {
         `https://uiti-crm-server.vercel.app/course`
       );
       const data = await res.json();
-      console.log("course name is", data.users )
       return data;
     },
   });
@@ -89,7 +88,6 @@ const EnrollCourse = () => {
     queryFn: async () => {
       const res = await fetch(`https://uiti-crm-server.vercel.app/head`);
       const data = await res.json();
-      console.log("head data is" , data.users )
       return data;
     },
   });
@@ -155,13 +153,9 @@ const EnrollCourse = () => {
       headName,
     };
 
-    console.log(
-      courseName,
-      batchName,
-      employeeName,
-      headName,)
+    
 
-    // console.log(name, email, phone, fristInstallment, secondInstallment, thirdInstallment, nextInstallmentDate, fristPaymentAccounts, totalInstallment, courseName, batchName, employeeName, headName,);
+    console.log(name, email, phone, fristInstallment, secondInstallment, thirdInstallment, nextInstallmentDate, fristPaymentAccounts, totalInstallment, courseName, batchName, employeeName, headName,);
     fetch(`https://uiti-crm-server.vercel.app/add-admissions`, {
       method: "POST",
       headers: {

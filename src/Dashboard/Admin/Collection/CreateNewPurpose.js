@@ -15,7 +15,7 @@ const CreateNewPurpose = () => {
     queryFn: async () => {
       setLoading(true);
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/collection-head`
+        `https://uiti-crm-server.vercel.app/collection-head`
       );
       const data = await res.json();
       setLoading(false);
@@ -43,11 +43,11 @@ const CreateNewPurpose = () => {
       purpose: purposeName,
     };
 
-    fetch(`https://demo-usc-crm-software.vercel.app/collection-head`, {
+    fetch(`https://uiti-crm-server.vercel.app/collection-head`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        authorization: localStorage.getItem("access_token"),
+        authorization: localStorage.getItem("token"),
       },
       body: JSON.stringify(addCourseName),
     })
@@ -68,11 +68,11 @@ const CreateNewPurpose = () => {
     }
 
     fetch(
-      `https://demo-usc-crm-software.vercel.app/delete-collection-head/${leads}`,
+      `https://uiti-crm-server.vercel.app/delete-collection-head/${leads}`,
       {
         method: "DELETE",
         headers: {
-          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+          authorization: `${localStorage.getItem("token")}`,
         },
       }
     )

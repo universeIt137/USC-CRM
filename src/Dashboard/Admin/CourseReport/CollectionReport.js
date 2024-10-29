@@ -20,6 +20,7 @@ const CollectionReport = () => {
     queryKey: ["admissions"],
     queryFn: async () => {
       const data = await getCourseCollectionData();
+      console.log(data);
       return data;
     },
   });
