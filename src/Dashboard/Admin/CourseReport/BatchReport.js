@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import ReactToPrint from "react-to-print";
 import {
@@ -47,38 +47,29 @@ const PayReport = () => {
     },
   });
 
+  useEffect(() => {
+    if (filterData.length > 0) {
+      const totalCollection = getCourseCollectionTotal(filterData, startDate, endDate);
+      setTotal(totalCollection);
+    }
+  }, [filterData, startDate, endDate]);
+
   const handleCollectionDateSearch = () => {
     const fData = admissions?.filter(
       (si) => si.batch.name === batchRef.current.value
     );
     setFilterData(fData);
-
-    var resultProductDataFrist = fData.filter(
+    const filteredData = fData.filter(
       (a) =>
-        a.fristInstallmentDate >= startDate && a.fristInstallmentDate <= endDate
+        (a.firstInstallmentDate >= startDate && a.firstInstallmentDate <= endDate) ||
+        (a.secondInstallmentDate >= startDate && a.secondInstallmentDate <= endDate) ||
+        (a.thirdInstallmentDate >= startDate && a.thirdInstallmentDate <= endDate)
     );
+    setFilterData(filteredData);
     setShow(true);
-
-    var resultProductDataTwo = fData.filter(
-      (a) =>
-        a.secondInstallmentDate >= startDate &&
-        a.secondInstallmentDate <= endDate
-    );
-
-    var resultProductDataThird = fData.filter(
-      (a) =>
-        a.thirdInstallmentDate >= startDate && a.thirdInstallmentDate <= endDate
-    );
-    const fitering = [
-      ...resultProductDataFrist,
-      ...resultProductDataTwo,
-      ...resultProductDataThird,
-    ];
-    setFilterData(fitering);
-
-    const totalColloction = getCourseCollectionTotal(fitering);
-    setTotal(totalColloction);
   };
+
+
 
   return (
     <div className="mx-2 my-6">
@@ -174,3 +165,9 @@ const PayReport = () => {
 };
 
 export default PayReport;
+
+
+
+
+
+

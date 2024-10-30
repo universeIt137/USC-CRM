@@ -69,6 +69,7 @@ const Collection = () => {
   //   },
   // });
 
+  
   const filterByMoneyReceipt = () => {
     let fData;
     if (moneyReceiptNo) {

@@ -6,7 +6,7 @@ export const getAllCollection = async () => {
     response = await axios.get(
       "https://uiti-crm-server.vercel.app/collection"
     );
-    // console.log(response);
+    console.log(response?.data?.collection);
   } catch (error) {
     console.error(error);
   }

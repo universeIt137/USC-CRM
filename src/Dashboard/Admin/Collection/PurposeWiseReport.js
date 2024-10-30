@@ -24,7 +24,7 @@ const PurposeWiseReport = () => {
     queryKey: ["allPurposeName"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/collection-head`
+        `https://uiti-crm-server.vercel.app/collection-head`
       );
       const data = await res.json();
       return data;

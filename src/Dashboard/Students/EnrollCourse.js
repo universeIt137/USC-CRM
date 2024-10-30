@@ -100,10 +100,10 @@ const EnrollCourse = () => {
 
     const admissionFee = e.target.admissionFee.value;
 
-    const fristInstallment = e.target.fristInstallment.value;
-    const fristPaymentAccounts = e.target.fristPaymentAccounts.value;
-    const fristInstallmentTID = e.target.fristInstallmentTID.value;
-    const fristInstallmentDate = e.target.fristInstallmentDate.value;
+    const firstInstallment = e.target.firstInstallment.value;
+    const firstPaymentAccounts = e.target.firstPaymentAccounts.value;
+    const firstInstallmentTID = e.target.firstInstallmentTID.value;
+    const firstInstallmentDate = e.target.firstInstallmentDate.value;
 
     const secondInstallment = e.target.secondInstallment.value;
     const secondPaymentAccounts = e.target.secondPaymentAccounts.value;
@@ -128,10 +128,10 @@ const EnrollCourse = () => {
       admissionStatus: true,
       admissionFee,
 
-      fristInstallment,
-      fristPaymentAccounts,
-      fristInstallmentTID,
-      fristInstallmentDate,
+      firstInstallment,
+      firstPaymentAccounts,
+      firstInstallmentTID,
+      firstInstallmentDate,
 
       secondInstallment,
       secondPaymentAccounts,
@@ -155,7 +155,7 @@ const EnrollCourse = () => {
 
     
 
-    console.log(name, email, phone, fristInstallment, secondInstallment, thirdInstallment, nextInstallmentDate, fristPaymentAccounts, totalInstallment, courseName, batchName, employeeName, headName,);
+    // console.log(name, email, phone, fristInstallment, secondInstallment, thirdInstallment, nextInstallmentDate, fristPaymentAccounts, totalInstallment, courseName, batchName, employeeName, headName,);
     fetch(`https://uiti-crm-server.vercel.app/add-admissions`, {
       method: "POST",
       headers: {
@@ -340,10 +340,10 @@ const EnrollCourse = () => {
                 <div className="flex flex-row gap-2">
                   <div className="form-control w-full">
                     <label className="label">
-                      <span className="label-text">Frist Installment</span>
+                      <span className="label-text">First Installment</span>
                     </label>
                     <input
-                      name="fristInstallment"
+                      name="firstInstallment"
                       type="text"
                       placeholder="Ex : 2000"
                       defaultValue={0}
@@ -352,10 +352,10 @@ const EnrollCourse = () => {
                   </div>
                   <div className="form-control w-full">
                     <label className="label">
-                      <span className="label-text">Frist Pay Accounts</span>
+                      <span className="label-text">First Pay Accounts</span>
                     </label>
                     <select
-                      name="fristPaymentAccounts"
+                      name="firstPaymentAccounts"
                       className="select select-bordered select-sm w-full"
                     >
                       <option disabled defaultValue>
@@ -368,10 +368,10 @@ const EnrollCourse = () => {
                   </div>
                   <div className="form-control w-full">
                     <label className="label">
-                      <span className="label-text">Frist Installment T ID</span>
+                      <span className="label-text">First Installment T ID</span>
                     </label>
                     <input
-                      name="fristInstallmentTID"
+                      name="firstInstallmentTID"
                       type="text"
                       placeholder="Transaction ID"
                       defaultValue={0}
@@ -380,10 +380,10 @@ const EnrollCourse = () => {
                   </div>
                   <div className="form-control w-full">
                     <label className="label">
-                      <span className="label-text">Frist Installment Date</span>
+                      <span className="label-text">First Installment Date</span>
                     </label>
                     <input
-                      name="fristInstallmentDate"
+                      name="firstInstallmentDate"
                       type="date"
                       placeholder="Next Installment Date"
                       defaultValue={""}
