@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactToPrint from "react-to-print";
 import {
   getCourseCollectionData,
   getCourseCollectionTotal,
 } from "../../../Utils/courseCollectionTotal";
 import CourseCollectionTable from "../Collection/CourseCollectionTable";
+import { startCase } from "lodash";
 
 const CollectionReport = () => {
   const [filterData, setFilterData] = useState([]);
-  // const [admissions, setAdmissionsData] = useState([]);
-  const [total, setTotal] = useState([]);
+  const [total, setTotal] = useState(0);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [show, setShow] = useState(false);
@@ -20,7 +20,6 @@ const CollectionReport = () => {
     queryKey: ["admissions"],
     queryFn: async () => {
       const data = await getCourseCollectionData();
-      console.log(data);
       return data;
     },
   });
@@ -30,39 +29,31 @@ const CollectionReport = () => {
     setStartDate(value);
   };
 
+
   const handleCollectionEndInputChange = (event) => {
     const value = event.target.value;
     setEndDate(value);
   };
 
+  useEffect(() => {
+    if (filterData.length > 0) {
+      const totalCollection = getCourseCollectionTotal(filterData, startDate, endDate);
+      setTotal(totalCollection);
+    }
+  }, [filterData, startDate, endDate]);
+
   const handleCollectionDateSearch = () => {
-    var resultProductDataFrist = admissions.filter(
+    const filteredData = admissions.filter(
       (a) =>
-        a.fristInstallmentDate >= startDate && a.fristInstallmentDate <= endDate
-    );
-    setShow(true);
-
-    var resultProductDataTwo = admissions.filter(
-      (a) =>
-        a.secondInstallmentDate >= startDate &&
-        a.secondInstallmentDate <= endDate
+        (a.firstInstallmentDate >= startDate && a.firstInstallmentDate <= endDate) ||
+        (a.secondInstallmentDate >= startDate && a.secondInstallmentDate <= endDate) ||
+        (a.thirdInstallmentDate >= startDate && a.thirdInstallmentDate <= endDate)
     );
 
-    var resultProductDataThird = admissions.filter(
-      (a) =>
-        a.thirdInstallmentDate >= startDate && a.thirdInstallmentDate <= endDate
-    );
-
-    const fitering = [
-      ...resultProductDataFrist,
-      ...resultProductDataTwo,
-      ...resultProductDataThird,
-    ];
-    setFilterData(fitering);
-
-    const totalColloction = getCourseCollectionTotal(fitering);
-    setTotal(totalColloction);
+    setFilterData(filteredData); 
+    setShow(true); 
   };
+
 
   return (
     <div className="mx-2 my-6">

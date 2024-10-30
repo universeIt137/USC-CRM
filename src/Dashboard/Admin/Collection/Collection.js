@@ -10,13 +10,14 @@ import {
 import {
   getCourseCollectionData,
   getCourseCollectionTotal,
+  getCourseExtraTotalMoney,
 } from "../../../Utils/courseCollectionTotal";
 import CollectionTable from "./CollectionTable";
 
 const Collection = () => {
   const [filterData, setFilterData] = useState([]);
   const [moneyReceiptNo, setMoneyReceiptNoNo] = useState();
-  const [extraCollections, setExtraCollections] = useState("");
+  const [extraCollections, setExtraCollections] = useState(0);
 
   const moneyReceiptRef = useRef();
   const [loading, setLoading] = useState(false);
@@ -25,9 +26,11 @@ const Collection = () => {
     queryKey: ["collections"],
     queryFn: async () => {
       setLoading(true);
-      const data = await getAllCollection();
-      let totalSum = getTotalAmountFilterCollection(data);
 
+      const data = await getAllCollection();
+
+
+      let totalSum = getTotalAmountFilterCollection(data);
       setExtraCollections(totalSum);
       setFilterData(data);
       setLoading(false);
@@ -38,36 +41,16 @@ const Collection = () => {
   const { data: courseCollectionsTotal } = useQuery({
     queryKey: ["courseCollectionsTotal"],
     queryFn: async () => {
-      const datas = await getCourseCollectionData();
-      const total = getCourseCollectionTotal(datas);
+      const data = await getCourseCollectionData();
+
+      const total = getCourseExtraTotalMoney(data);
+
       return total;
     },
   });
 
-  // const { data: collections = [], refetch } = useQuery({
-  //   queryKey: ["collections"],
-  //   queryFn: async () => {
-  //     setLoading(true);
-  //     const res = await fetch(`https://demo-usc-crm-software.vercel.app/collection`);
-  //     const data = await res.json();
 
-  //     let fdata = [...data?.collection];
 
-  //     fdata?.sort(function (a, b) {
-  //       if (a?.date?.slice(0, 10) < b?.date?.slice(0, 10)) {
-  //         return -1;
-  //       }
-  //       if (b?.date?.slice(0, 10) < a?.date?.slice(0, 10)) {
-  //         return 1;
-  //       }
-  //       return 0;
-  //     });
-  //     setFilterData(fdata);
-  //     setLoading(false);
-
-  //     return data;
-  //   },
-  // });
 
   const filterByMoneyReceipt = () => {
     let fData;
@@ -80,10 +63,17 @@ const Collection = () => {
         moneyReceiptRef.current.value
       );
     }
-    toast.success("Data filtered successfully");
+
+    if (fData.length === 0) {
+      toast.error("Data not found");
+    } else {
+      toast.success("Data filtered successfully");
+    }
 
     setFilterData(fData);
   };
+
+
 
   return (
     <div>

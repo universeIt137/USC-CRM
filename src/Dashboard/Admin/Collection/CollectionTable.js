@@ -11,6 +11,7 @@ const CollectionTable = ({ filterData, refetch, showAction }) => {
     setShowModal(true);
   };
 
+
   const handleDelete = (leads) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this item?"
