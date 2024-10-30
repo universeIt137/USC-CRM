@@ -14,7 +14,10 @@ export const getCourseCollectionData = async () => {
 
 export const getCourseCollectionTotal = (data, startDate, endDate) => {
 
-  console.log( "getCourseCollectionTotal" , data)
+  console.log(`startDate is ${startDate} and endDate is ${endDate}`);
+
+  console.log(`data is ${data} `);
+
 
   let totalOne = 0;
   let totalTwo = 0;
@@ -66,4 +69,27 @@ export const getCourseExtraTotalMoney = (data) => {
   const totalCollection = totalOne + totalTwo + totalThree;
 
   return totalCollection;
+};
+
+
+export const getCourseByCollectionDate = (data) => {
+  var resultProductDataFrist = data?.filter((a) => a.fristInstallment);
+  var resultProductDataTwo = data?.filter((a) => a.secondInstallment);
+  var resultProductDataThird = data?.filter((a) => a.thirdInstallment);
+
+  var totalOne = 0;
+  for (var tsOne = 0; tsOne < resultProductDataFrist?.length; tsOne++) {
+    totalOne += resultProductDataFrist?.[tsOne]?.fristInstallment;
+  }
+  var totalTwo = 0;
+  for (var tsTwo = 0; tsTwo < resultProductDataTwo?.length; tsTwo++) {
+    totalTwo += resultProductDataTwo?.[tsTwo]?.secondInstallment;
+  }
+  var totalThree = 0;
+  for (var tsThree = 0; tsThree < resultProductDataThird?.length; tsThree++) {
+    totalThree += resultProductDataThird?.[tsThree]?.thirdInstallment;
+  }
+  const totalColloction = totalOne + totalTwo + totalThree;
+
+  return totalColloction;
 };

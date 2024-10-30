@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactToPrint from "react-to-print";
 import { filterDate } from "../../../Utils/helper";
 import { useQuery } from "@tanstack/react-query";
@@ -58,46 +58,35 @@ const CollectionDateWiseReport = () => {
     setEndDate(value);
   };
 
+  useEffect(() => {
+    if (filterCourseData.length > 0) {
+      const totalCollection = getCourseCollectionTotal(filterCourseData, startDate, endDate);
+      setCourseCollectionTotal(totalCollection);
+    }
+  }, [filterCourseData, startDate, endDate]);
+
   const handleCollectionDateSearch = async () => {
     // var resultExpenseData = collections?.collection?.filter(a => (a.createdAt) >= startDate && (a.createdAt) <= endDate);
 
     const resultExpenseData = filterDate(collections, startDate, endDate);
 
     setFilterData(resultExpenseData);
+
     setShow(true);
 
     let totalSum = getTotalAmountFilterCollection(resultExpenseData);
 
     setExtraCollectionTotal(totalSum);
 
-    var resultProductDataFrist = admissions.filter(
+    const filteredData = admissions.filter(
       (a) =>
-        a.fristInstallmentDate >= startDate && a.fristInstallmentDate <= endDate
+        (a.firstInstallmentDate >= startDate && a.firstInstallmentDate <= endDate) ||
+        (a.secondInstallmentDate >= startDate && a.secondInstallmentDate <= endDate) ||
+        (a.thirdInstallmentDate >= startDate && a.thirdInstallmentDate <= endDate)
     );
+
     setShow(true);
-
-    var resultProductDataTwo = admissions.filter(
-      (a) =>
-        a.secondInstallmentDate >= startDate &&
-        a.secondInstallmentDate <= endDate
-    );
-
-    var resultProductDataThird = admissions.filter(
-      (a) =>
-        a.thirdInstallmentDate >= startDate && a.thirdInstallmentDate <= endDate
-    );
-
-    const fitering = [
-      ...resultProductDataFrist,
-      ...resultProductDataTwo,
-      ...resultProductDataThird,
-    ];
-
-    setFilterCourseData(fitering);
-
-    const totalColloction = getCourseCollectionTotal(fitering);
-
-    setCourseCollectionTotal(totalColloction);
+    setFilterCourseData(filteredData)
   };
   // -------------Collection Date to Date wise Filter End--------------------
 
