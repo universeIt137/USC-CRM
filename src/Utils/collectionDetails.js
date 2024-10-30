@@ -1,30 +1,29 @@
 import axios from "axios";
 
+
 export const getAllCollection = async () => {
-  let response;
   try {
-    response = await axios.get(
+    const response = await axios.get(
       "https://uiti-crm-server.vercel.app/collection"
     );
-    console.log(response?.data?.collection);
+
+    if (!response?.data?.collection) {
+      console.error("কোনো collection ডেটা পাওয়া যায়নি।");
+      return []; 
+    }
+
+    const sortingData = [...response.data.collection].sort((a, b) =>
+      a?.date?.slice(0, 10).localeCompare(b?.date?.slice(0, 10))
+    );
+
+    return sortingData;
+
   } catch (error) {
-    console.error(error);
+    console.error("Collection ডেটা আনতে সমস্যা:", error);
+    return []; 
   }
-
-  let sortingData = [...response?.data?.collection];
-
-  sortingData?.sort(function (a, b) {
-    if (a?.date?.slice(0, 10) < b?.date?.slice(0, 10)) {
-      return -1;
-    }
-    if (b?.date?.slice(0, 10) < a?.date?.slice(0, 10)) {
-      return 1;
-    }
-    return 0;
-  });
-
-  return sortingData;
 };
+
 
 export const getTotalAmountFilterCollection = (data) => {
   var totalSum = 0;

@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// API থেকে ডেটা রিটার্ন করা
 export const getCourseCollectionData = async () => {
   try {
     const response = await axios.get(
@@ -14,6 +13,9 @@ export const getCourseCollectionData = async () => {
 };
 
 export const getCourseCollectionTotal = (data, startDate, endDate) => {
+
+  console.log( "getCourseCollectionTotal" , data)
+
   let totalOne = 0;
   let totalTwo = 0;
   let totalThree = 0;
@@ -46,5 +48,22 @@ export const getCourseCollectionTotal = (data, startDate, endDate) => {
   });
 
   const totalCollection = totalOne + totalTwo + totalThree;
+  return totalCollection;
+};
+
+
+export const getCourseExtraTotalMoney = (data) => {
+  let totalOne = 0;
+  let totalTwo = 0;
+  let totalThree = 0;
+
+  data?.forEach((item) => {
+    if (item.firstInstallment) totalOne += item.firstInstallment;
+    if (item.secondInstallment) totalTwo += item.secondInstallment;
+    if (item.thirdInstallment) totalThree += item.thirdInstallment;
+  });
+
+  const totalCollection = totalOne + totalTwo + totalThree;
+
   return totalCollection;
 };

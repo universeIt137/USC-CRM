@@ -63,7 +63,7 @@ const CollectionModal = ({ singlcollectionData, setShowModal, refetch }) => {
     fetch(
       `https://uiti-crm-server.vercel.app/update-collection/${singlcollectionData._id}`,
       {
-        method: "PATCH",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           authorization: `${localStorage.getItem("token")}`,
