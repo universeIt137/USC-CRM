@@ -4,39 +4,39 @@ import { useQuery } from "@tanstack/react-query";
 
 const RevPayableLoan = () => {
   const value = localStorage.getItem("myValue");
-
   const { loansPayData } = useContext(AuthContext);
 
   const { data: revLoan = [], refetch } = useQuery({
     queryKey: ["revLoan"],
     queryFn: async () => {
-      const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/loan/rev`
-      );
+      const res = await fetch(`https://uiti-crm-server.vercel.app/loan/rev`);
       const data = await res.json();
+      console.log(data);
       return data;
     },
   });
 
-  // console.log(revLoan)
+  // Calculate total loan amount for the selected loan
+  const loanAmount = loansPayData?.loans
+    ?.filter((item) => item._id === value)
+    .reduce((total, item) => total + parseInt(item.loanAmount), 0) || 0;
 
-  const totalLoan = loansPayData?.loans?.filter((item) => item._id === value);
-  const loanAmount = totalLoan?.map((item) => parseInt(item.loanAmount));
-
+  // Filter and calculate received amounts
   const matchingItems = revLoan?.loans?.filter(
     (item) => item?.loanId?._id === value
   );
-  // console.log(matchingItems)
-  const amounts = matchingItems?.map((item) => parseInt(item.revAmmount));
-  const revAmmount = amounts?.reduce((total, amount) => total + amount, 0);
+  const revAmmount = matchingItems?.reduce(
+    (total, item) => total + parseInt(item.revAmmount),
+    0
+  ) || 0;
 
-  const tt = loanAmount - revAmmount;
+  const loanDue = loanAmount - revAmmount;
 
   return (
     <div>
       <h1 className="text-2xl font-bold my-2">Loan Receive Details: {value}</h1>
       <h2 className="text-1xl font-bold my-2">
-        Loan Amount: {loanAmount} - Loan Receive: {revAmmount} = Loan Due: {tt}
+        Loan Amount: {loanAmount} - Loan Receive: {revAmmount} = Loan Due: {loanDue}
       </h2>
 
       <table className="table w-full">
@@ -69,7 +69,11 @@ const RevPayableLoan = () => {
               </tr>
             ))
           ) : (
-            <p>No matching items found</p>
+            <tr>
+              <td colSpan="7" className="p-1 border-2 text-center">
+                No matching items found
+              </td>
+            </tr>
           )}
         </tbody>
       </table>

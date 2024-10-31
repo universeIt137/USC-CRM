@@ -12,7 +12,7 @@ const AllReceiveLoan = () => {
     queryKey: ["loans"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/loan?loanReceiveStatus=true`
+        `https://uiti-crm-server.vercel.app/loan?loanReceiveStatus=true`
       );
       const data = await res.json();
       setFilterData(data);
@@ -23,10 +23,10 @@ const AllReceiveLoan = () => {
   const handleDelete = (leads) => {
     // console.log(leads._id);
 
-    fetch(`https://demo-usc-crm-software.vercel.app/delete-loan/${leads._id}`, {
+    fetch(`https://uiti-crm-server.vercel.app/delete-loan/${leads._id}`, {
       method: "DELETE",
       headers: {
-        authorization: `bearer ${localStorage.getItem("accessToken")}`,
+        authorization: `${localStorage.getItem("token")}`,
       },
     })
       .then((res) => {
@@ -53,7 +53,7 @@ const AllReceiveLoan = () => {
     queryKey: ["payLoan"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/loan/pay`
+        `https://uiti-crm-server.vercel.app/loan/pay`
       );
       const data = await res.json();
       return data;

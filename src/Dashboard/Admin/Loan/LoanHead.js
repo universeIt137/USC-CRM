@@ -1,5 +1,6 @@
 // import { useQuery } from '@tanstack/react-query';
 import { useQuery } from "@tanstack/react-query";
+import moment from "moment/moment";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 
@@ -14,7 +15,7 @@ const LoanHead = () => {
     queryKey: ["loanHeadName"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/loan-head`
+        `https://uiti-crm-server.vercel.app/loan-head`
       );
       const data = await res.json();
       return data;
@@ -26,12 +27,12 @@ const LoanHead = () => {
       purpose: loanHead,
     };
 
-    fetch(`https://demo-usc-crm-software.vercel.app/loan-head`, {
+    fetch(`https://uiti-crm-server.vercel.app/loan-head`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
         // authorization: `Bearer ${localStorage.getItem('access_token')}`
-        authorization: localStorage.getItem("access_token"),
+        authorization: localStorage.getItem("token"),
       },
       body: JSON.stringify(addCourseName),
     })
@@ -47,11 +48,11 @@ const LoanHead = () => {
     // console.log(leads);
 
     fetch(
-      `https://demo-usc-crm-software.vercel.app/delete-loan-head/${leads}`,
+      `https://uiti-crm-server.vercel.app/delete-loan-head/${leads}`,
       {
         method: "DELETE",
         headers: {
-          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+          authorization: `${localStorage.getItem("token")}`,
         },
       }
     )
@@ -100,7 +101,7 @@ const LoanHead = () => {
                     <tr key={online._id}>
                       <th className="p-1 border-2">{i + 1}</th>
                       <td className="p-1 border-2">
-                        {online.date.slice(0, 10)}
+                        {moment(online.createdAt).format("MMMM Do YYYY")}
                       </td>
                       <td className="p-1 border-2">{online.purpose}</td>
                       <td className="p-1 border-2">
