@@ -163,9 +163,9 @@ const CollectionDateWiseReport = () => {
             <h1 className="font-bold ">Date Wise Course Collection Report</h1>
 
             <CourseCollectionTable
-              filterData={filterCourseData}
-              startDate={startDate}
-              endDate={endDate}
+              filterData={""}
+              startDate={""}
+              endDate={""}
             ></CourseCollectionTable>
 
             <h1 className="font-bold mt-4">
@@ -175,7 +175,7 @@ const CollectionDateWiseReport = () => {
             <div className="mt-2 mx-1 flex justify-end">
               <p className="p-1 border-2 mr-2">
                 {" "}
-                Total Course Collection : {courseCollectionTotal} BDT
+                Total Course Collection : {""} BDT
               </p>
               <p className="p-1 border-2 mr-2">
                 {" "}
@@ -183,7 +183,7 @@ const CollectionDateWiseReport = () => {
               </p>
               <p className="p-1 border-2 mr-2">
                 == Total Collection :{" "}
-                {courseCollectionTotal + extraCollectionTotal} BDT
+                {extraCollectionTotal} BDT
               </p>
             </div>
           </>
