@@ -10,7 +10,7 @@ const AddExpense = () => {
     queryKey: ["expenseHeadName"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/expense-head`
+        `https://uiti-crm-server.vercel.app/expense-head`
       );
       const data = await res.json();
       return data;
@@ -37,11 +37,11 @@ const AddExpense = () => {
     console.log(personalData);
     // console.log(date, voucherNo, purpose, expenseBy, amount, discription,);
 
-    fetch(`https://demo-usc-crm-software.vercel.app/expense`, {
+    fetch(`https://uiti-crm-server.vercel.app/expense`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        authorization: localStorage.getItem("access_token"),
+        authorization: localStorage.getItem("token"),
       },
       body: JSON.stringify(personalData),
     })

@@ -9,6 +9,7 @@ import {
   getTotalAmountFilterCollection,
 } from "../../../Utils/collectionDetails";
 import {
+  getCourseByCollectionDate,
   getCourseCollectionData,
   getCourseCollectionTotal,
 } from "../../../Utils/courseCollectionTotal";
@@ -50,8 +51,9 @@ const Expense = () => {
   const { data: courseCollectionsTotal } = useQuery({
     queryKey: ["courseCollectionsTotal"],
     queryFn: async () => {
-      const datas = await getCourseCollectionData();
-      const total = getCourseCollectionTotal(datas);
+      const data = await getCourseCollectionData();
+      const total = getCourseByCollectionDate(data);
+      console.log(data)
       return total;
     },
   });
@@ -93,7 +95,7 @@ const Expense = () => {
           <div className="text-1xl flex ">
             <p className="w-[180px]"> Total Cash In </p>
             <p>
-              : {courseCollectionsTotal + totalExtraCollection - totalExpense}{" "}
+              : {(courseCollectionsTotal + totalExtraCollection) - totalExpense}{" "}
               BDT
             </p>
           </div>
