@@ -45,7 +45,7 @@ const PayDetails = () => {
 
   const refetchUpdateData = async () => {
     const res = await fetch(
-      `https://demo-usc-crm-software.vercel.app/leads?admission=true&admissionStatus=true`
+      `https://uiti-crm-server.vercel.app/leads?admission=true&admissionStatus=true`
     );
     const data = await res.json();
     let afterFilter = [];
@@ -53,18 +53,15 @@ const PayDetails = () => {
       const ssData = data?.filter((d) => d?._id === sData?._id);
       afterFilter = [...afterFilter, ...ssData];
     });
-    // console.log(afterFilter)
-    // console.log(afterFilter)
     setFilterData(afterFilter);
   };
 
   useEffect(() => {
     fetch(
-      `https://demo-usc-crm-software.vercel.app/leads?admission=true&admissionStatus=true`
+      `https://uiti-crm-server.vercel.app/leads?admission=true&admissionStatus=true`
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
 
         setAllData(data);
         setPaginate(Math.ceil(data.length / 7));
@@ -79,7 +76,6 @@ const PayDetails = () => {
   // -----------------Filter Start--------------------
 
   const [selectedValue, setSelectedValue] = useState([]);
-  // console.log(selectedValue)
 
   const uniqueCourse = [
     ...new Set(admissions?.map((user) => user?.course?.name)),
@@ -185,7 +181,7 @@ const PayDetails = () => {
       closePayment: true,
     };
 
-    fetch(`https://demo-usc-crm-software.vercel.app/update/${admission._id}`, {
+    fetch(`https://uiti-crm-server.vercel.app/update/${admission._id}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
@@ -216,7 +212,7 @@ const PayDetails = () => {
       closePayment: false,
     };
 
-    fetch(`https://demo-usc-crm-software.vercel.app/update/${admission._id}`, {
+    fetch(`https://uiti-crm-server.vercel.app/update/${admission._id}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
@@ -228,15 +224,6 @@ const PayDetails = () => {
       .then((data) => {
         toast.success(`Open successfully`);
         refetchUpdateData(data);
-        // fetch('https://demo-usc-crm-software.vercel.app/leads?admission=true&admissionStatus=true')
-        //     .then(res => res.json())
-        //     .then(updatedData => {
-        //         setFilterData(updatedData)
-        //     })
-        //     .catch(error => {
-        //         console.error('Update request failed:', error);
-        //         toast.error('An error occurred while updating the API.');
-        //     });
       })
       .catch((error) => {
         console.error("Delete request failed:", error);
@@ -248,7 +235,7 @@ const PayDetails = () => {
   for (var i = 0; i < filterData?.length; i++) {
     const tt =
       filterData[i].admissionFee -
-      (filterData[i].fristInstallment +
+      (filterData[i].firstInstallment +
         filterData[i].secondInstallment +
         filterData[i].thirdInstallment);
     // // console.log(tt)
@@ -263,7 +250,7 @@ const PayDetails = () => {
   var totalSum = 0;
   for (var ts = 0; ts < filterData?.length; ts++) {
     totalSum +=
-      filterData[ts].fristInstallment +
+      filterData[ts].firstInstallment +
       filterData[ts].secondInstallment +
       filterData[ts].thirdInstallment;
   }
@@ -288,66 +275,6 @@ const PayDetails = () => {
 
   return (
     <div className="mx-2 p-0" ref={printRef}>
-      {/* <nav
-        aria-label="breadcrumb"
-        className="w-full p-2 dark:bg-gray-800 dark:text-gray-100"
-      >
-        <ol className="flex h-8 space-x-2">
-          <li className="flex items-center">
-            <a
-              rel="noopener noreferrer"
-              href="#"
-              title="Back to homepage"
-              className="hover:underline"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-5 h-5 pr-1 dark:text-gray-400"
-              >
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-              </svg>
-            </a>
-          </li>
-          <li className="flex items-center space-x-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 32 32"
-              aria-hidden="true"
-              fill="currentColor"
-              className="w-2 h-2 mt-1 transform rotate-90 fill-current dark:text-gray-600"
-            >
-              <path d="M32 30.031h-32l16-28.061z"></path>
-            </svg>
-            <a
-              rel="noopener noreferrer"
-              href="#"
-              className="flex items-center px-1 capitalize hover:underline"
-            >
-              Dashboard
-            </a>
-          </li>
-          <li className="flex items-center space-x-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 32 32"
-              aria-hidden="true"
-              fill="currentColor"
-              className="w-2 h-2 mt-1 transform rotate-90 fill-current dark:text-gray-600"
-            >
-              <path d="M32 30.031h-32l16-28.061z"></path>
-            </svg>
-            <a
-              rel="noopener noreferrer"
-              href="#"
-              className="flex items-center px-1 capitalize hover:underline"
-            >
-              {user.name}'s Admissions Payment
-            </a>
-          </li>
-        </ol>
-      </nav> */}
       <div ref={pdfDownloadRef} style={{ width: "100%" }}>
         <div className="flex flex-wrap items-center ">
           <div className="form-control mx-2">
@@ -564,12 +491,12 @@ const PayDetails = () => {
                               {admission?.email?.split("@", 1)}
                             </td>
                             <td className="p-1 border-2">
-                              {admission.fristPaymentAccounts ||
+                              {admission.firstPaymentAccounts ||
                                 admission.secondPaymentAccounts ||
                                 admission.thirdPaymentAccounts}
                             </td>
                             <td className="p-1 border-2">
-                              {admission.fristInstallmentTID ||
+                              {admission.firstPaymentAccounts ||
                                 admission.secondInstallmentTID ||
                                 admission.thirdInstallmentTID}
                             </td>
@@ -577,7 +504,7 @@ const PayDetails = () => {
                               {admission.admissionFee}
                             </td>
                             <td className="p-1 border-2">
-                              {admission.fristInstallment}
+                              {admission.firstInstallment}
                             </td>
                             <td className="p-1 border-2">
                               {admission.secondInstallment === 0
@@ -594,7 +521,7 @@ const PayDetails = () => {
                                 ? 0
                                 : admission.admissionFee &&
                                   admission.admissionFee -
-                                    (admission.fristInstallment +
+                                    (admission.firstInstallment +
                                       admission.secondInstallment +
                                       admission.thirdInstallment)}
                             </td>
@@ -632,9 +559,7 @@ const PayDetails = () => {
               </table>
             </form>
           </div>
-          {/* {
-                        filterData.map(fd => setClosePayment(fd.closePayment))
-                    } */}
+          
           <div className="mt-2 mx-1 flex justify-end">
             <p className="p-1 border-2"> Total : {totalSum} BDT</p>
             <p className="p-1 border-2"> Due : {due} BDT</p>

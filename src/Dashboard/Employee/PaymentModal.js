@@ -15,14 +15,14 @@ const PaymentModal = ({ admission, setAdmission, refetchUpdateData }) => {
     const batch = e?.target?.batch?.value || "";
     const preBatch = e?.target?.preBatch?.value || "";
 
-    const fristInstallment = e?.target?.fristInstallment?.value || "";
+    const firstInstallment = e?.target?.firstInstallment?.value || "";
     const fristPaymentAccounts = fristPaymentAccountsRef?.current?.value || "";
     // console.log(fristPaymentAccounts)
     const fristInstallmentTID = e?.target?.fristInstallmentTID?.value || "";
     const fristInstallmentDate = e?.target?.fristInstallmentDate?.value || "";
 
-    if (fristInstallment) {
-      const fristInstallmentAmonut = Number(fristInstallment);
+    if (firstInstallment) {
+      const fristInstallmentAmonut = Number(firstInstallment);
       const admissionFeeAmount = Number(admissionFee);
 
       if (fristInstallmentAmonut < 1) {
@@ -150,7 +150,7 @@ const PaymentModal = ({ admission, setAdmission, refetchUpdateData }) => {
       batchId: admission.batch.id,
       preBatch,
 
-      fristInstallment,
+      firstInstallment,
       fristPaymentAccounts,
       fristInstallmentTID,
       fristInstallmentDate,
@@ -172,7 +172,7 @@ const PaymentModal = ({ admission, setAdmission, refetchUpdateData }) => {
 
     axios
       .patch(
-        `https://demo-usc-crm-software.vercel.app/update-admission-pay/${admission._id}`,
+        `https://uiti-crm-server.vercel.app/update-admission-pay/${admission._id}`,
         user
       )
       .then((data) => {
@@ -191,7 +191,7 @@ const PaymentModal = ({ admission, setAdmission, refetchUpdateData }) => {
     queryKey: ["paygetwaysName"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/pay-getway`
+        `https://uiti-crm-server.vercel.app/pay-getway`
       );
       const data = await res.json();
       return data;
@@ -290,9 +290,9 @@ const PaymentModal = ({ admission, setAdmission, refetchUpdateData }) => {
                   name="fristInstallment"
                   type="text"
                   defaultValue={
-                    admission.fristInstallment ? admission.fristInstallment : 0
+                    admission.firstInstallment ? admission.firstInstallment : 0
                   }
-                  disabled={admission.fristInstallment > 0 ? true : false}
+                  disabled={admission.firstInstallment > 0 ? true : false}
                   className="input input-accent input-sm focus:ring-0 focus:outline-0 focus:input-sm focus:border-2 w-full max-w-[200px]"
                 />
               </div>
@@ -366,7 +366,7 @@ const PaymentModal = ({ admission, setAdmission, refetchUpdateData }) => {
                   defaultValue={admission.secondPaymentAccounts}
                   ref={secondPaymentAccountsRef}
                   disabled={
-                    admission.fristInstallment > 0 &&
+                    admission.firstInstallment > 0 &&
                     admission?.secondInstallment < 1
                       ? false
                       : true
