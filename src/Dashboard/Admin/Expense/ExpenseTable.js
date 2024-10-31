@@ -4,6 +4,7 @@ import ExpenseModal from "./ExpenseModal";
 
 const ExpenseTable = ({ expenseDatas, refetch, showAction }) => {
   const [singlexpenseData, setSingleExpenseData] = useState({});
+  console.log(expenseDatas);
 
   const handleEdit = (data) => {
     console.log(data);
@@ -19,11 +20,11 @@ const ExpenseTable = ({ expenseDatas, refetch, showAction }) => {
     }
 
     fetch(
-      `https://demo-usc-crm-software.vercel.app/delete-expense/${leads._id}`,
+      `https://uiti-crm-server.vercel.app/delete-expense/${leads._id}`,
       {
         method: "DELETE",
         headers: {
-          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+          authorization: `${localStorage.getItem("token")}`,
         },
       }
     )
