@@ -6,6 +6,7 @@ import {
   getTotalAmountFilterCollection,
 } from "../../../Utils/collectionDetails";
 import {
+  getCourseByCollectionDate,
   getCourseCollectionData,
   getCourseCollectionTotal,
 } from "../../../Utils/courseCollectionTotal";
@@ -57,7 +58,7 @@ const CashIn = () => {
     queryKey: ["admissions"],
     queryFn: async () => {
       const data = await getCourseCollectionData();
-      const totalAmount = getCourseCollectionTotal(data);
+      const totalAmount = getCourseByCollectionDate(data);
 
       setTotalCourseCollection(totalAmount);
       return data;
@@ -87,10 +88,10 @@ const CashIn = () => {
     setExtraCollectionTotal(totalSum);
 
     //Course Collection Data
-    let resultProductDataFrist = admissions.filter((a) => {
+    let resultProductDataFirst = admissions.filter((a) => {
       if (
-        a.fristInstallmentDate >= startDate &&
-        a.fristInstallmentDate <= endDate
+        a.firstInstallmentDate >= startDate &&
+        a.firstInstallmentDate <= endDate
       ) {
         return true;
       }
@@ -109,11 +110,9 @@ const CashIn = () => {
 
       return false;
     });
-    setFilterCourseCollectionData(resultProductDataFrist);
+    setFilterCourseCollectionData(resultProductDataFirst);
 
-    const totalCourseCollection = getCourseCollectionTotal(
-      resultProductDataFrist
-    );
+    const totalCourseCollection = getCourseByCollectionDate(resultProductDataFirst);
 
     setCourseCollectionTotal(totalCourseCollection);
 
