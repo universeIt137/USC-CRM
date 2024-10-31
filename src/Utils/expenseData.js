@@ -4,9 +4,8 @@ export const getAllExpenseData = async () => {
   let response;
   try {
     response = await axios.get(
-      "https://demo-usc-crm-software.vercel.app/expense"
+      "https://uiti-crm-server.vercel.app/expense"
     );
-    // console.log(response);
   } catch (error) {
     console.error(error);
   }
@@ -22,6 +21,8 @@ export const getAllExpenseData = async () => {
     }
     return 0;
   });
+
+  console.log(`sorting data is ${sortingData} `)
 
   return sortingData;
 };
