@@ -24,7 +24,6 @@ const VoucherNoWiseReport = () => {
   // -------------Collection Date to Date wise Filter Start--------------------
 
   const handleCollectionDateSearch = () => {
-    console.log(voucherNoRef.current.value);
     let fData;
 
     if (voucharNo) {
