@@ -40,6 +40,7 @@ const MeneyReceiptWiseReport = () => {
 
     setFilterData(fData);
     setShow(true);
+    
   };
   // -------------Collection Date to Date wise Filter End--------------------
 

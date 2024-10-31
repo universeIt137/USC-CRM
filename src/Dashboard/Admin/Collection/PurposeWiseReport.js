@@ -47,6 +47,7 @@ const PurposeWiseReport = () => {
     },
   });
 
+
   // -------------Collection Date to Date wise Filter Start--------------------
   const handleCollectionStartInputChange = (event) => {
     const value = event.target.value;
@@ -62,6 +63,7 @@ const PurposeWiseReport = () => {
 
   const handleCollectionDateSearch = () => {
     let resultFilterDate = filterDate(collections, startDate, endDate);
+    console.log(resultFilterDate)
 
     let filterPurpose;
 
@@ -79,14 +81,20 @@ const PurposeWiseReport = () => {
       );
     }
 
+
     let totalAmount = getTotalAmountFilterCollection(filterPurpose);
+
     setExpenseTotal(totalAmount);
+    console.log(totalAmount);
 
     setFilterData(filterPurpose);
+
     setShow(true);
 
     toast.success("Data filtered successfully");
   };
+
+
   // -------------Collection Date to Date wise Filter End--------------------
 
   return (

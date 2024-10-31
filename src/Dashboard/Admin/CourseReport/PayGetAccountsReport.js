@@ -38,7 +38,7 @@ const PayGetAccountsReport = () => {
     queryKey: ["payGetwaysName"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/pay-getway`
+        `https://uiti-crm-server.vercel.app/pay-getway`
       );
       const data = await res.json();
       return data;

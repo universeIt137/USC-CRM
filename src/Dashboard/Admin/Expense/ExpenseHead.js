@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import Loading from "../../../Pages/Shared/loading";
+import moment from 'moment';
 
 const ExpenseHead = () => {
   const [expenseHead, setExpenseHead] = useState();
@@ -16,10 +17,11 @@ const ExpenseHead = () => {
     queryFn: async () => {
       setLoading(true);
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/expense-head`
+        `https://uiti-crm-server.vercel.app/expense-head`
       );
       const data = await res.json();
       setLoading(false);
+      console.log(data)
       return data;
     },
   });
@@ -29,12 +31,11 @@ const ExpenseHead = () => {
       purpose: expenseHead,
     };
 
-    fetch(`https://demo-usc-crm-software.vercel.app/expense-head`, {
+    fetch(`https://uiti-crm-server.vercel.app/expense-head`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        // authorization: `Bearer ${localStorage.getItem('access_token')}`
-        authorization: localStorage.getItem("access_token"),
+        authorization: localStorage.getItem("token"),
       },
       body: JSON.stringify(addCourseName),
     })
@@ -55,11 +56,11 @@ const ExpenseHead = () => {
     }
 
     fetch(
-      `https://demo-usc-crm-software.vercel.app/delete-expense-head/${leads}`,
+      `https://uiti-crm-server.vercel.app/delete-expense-head/${leads}`,
       {
         method: "DELETE",
         headers: {
-          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+          authorization: `${localStorage.getItem("token")}`,
         },
       }
     )
@@ -112,10 +113,10 @@ const ExpenseHead = () => {
                 <tbody className="w-fit text-xs">
                   {expenseHeadName?.users?.length > 0 &&
                     expenseHeadName?.users?.map((online, i) => (
-                      <tr key={online._id}>
+                      <tr key={i}>
                         <th className="p-1 border-2">{i + 1}</th>
                         <td className="p-1 border-2">
-                          {online?.date?.slice(0, 10)}
+                          {moment(online.createdAt).format("MMMM Do YYYY")}
                         </td>
                         <td className="p-1 border-2">{online.purpose}</td>
                         <td className="p-1 border-2 text-center">
