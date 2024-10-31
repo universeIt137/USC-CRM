@@ -13,7 +13,7 @@ const CreateNewPaymentType = () => {
     queryKey: ["batchsName"],
     queryFn: async () => {
       const res = await fetch(
-        `https://demo-usc-crm-software.vercel.app/pay-getway`
+        `https://uiti-crm-server.vercel.app/pay-getway`
       );
       const data = await res.json();
       return data;
@@ -29,11 +29,11 @@ const CreateNewPaymentType = () => {
     }
 
     fetch(
-      `https://demo-usc-crm-software.vercel.app/delete-pay-getway/${leads}`,
+      `https://uiti-crm-server.vercel.app/delete-pay-getway/${leads}`,
       {
         method: "DELETE",
         headers: {
-          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+          authorization: `${localStorage.getItem("token")}`,
         },
       }
     )
@@ -62,11 +62,11 @@ const CreateNewPaymentType = () => {
       name: payGetwayName,
     };
 
-    fetch(`https://demo-usc-crm-software.vercel.app/pay-getway`, {
+    fetch(`https://uiti-crm-server.vercel.app/pay-getway`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        authorization: localStorage.getItem("access_token"),
+        authorization: localStorage.getItem("token"),
       },
       body: JSON.stringify(addpayGetwayName),
     })
