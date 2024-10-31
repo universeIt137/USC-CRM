@@ -27,8 +27,8 @@ const ExpenseDateWiseReport = () => {
   const componentRef = useRef();
   const [show, setShow] = useState(false);
 
-  const { data: collectionDatas = [] } = useQuery({
-    queryKey: ["collectionDatas"],
+  const { data: collectionData = [] } = useQuery({
+    queryKey: ["collectionData"],
     queryFn: async () => {
       const data = await getAllCollection();
       return data;
@@ -38,8 +38,9 @@ const ExpenseDateWiseReport = () => {
   const { data: courseCollections } = useQuery({
     queryKey: ["courseCollections "],
     queryFn: async () => {
-      const datas = await getCourseCollectionData();
-      return datas;
+      const data = await getCourseCollectionData();
+      console.log(`course collection is ${data}`)
+      return data;
     },
   });
 
@@ -72,7 +73,7 @@ const ExpenseDateWiseReport = () => {
     setExpenseTotal(totalAmount);
 
     const resultCollectionData = filterDate(
-      collectionDatas,
+      collectionData,
       startDate,
       endDate
     );
@@ -85,34 +86,27 @@ const ExpenseDateWiseReport = () => {
     setExtraCollectionTotal(totalSum);
 
     // Collection Data
-    var resultProductDataFrist = courseCollections.filter(
+    const filteredData = courseCollections.filter(
       (a) =>
-        a.fristInstallmentDate >= startDate && a.fristInstallmentDate <= endDate
+        (a.firstInstallmentDate >= startDate && a.firstInstallmentDate <= endDate) ||
+        (a.secondInstallmentDate >= startDate && a.secondInstallmentDate <= endDate) ||
+        (a.thirdInstallmentDate >= startDate && a.thirdInstallmentDate <= endDate)
     );
-    // console.log(resultProductDataFrist)
-    setShow(true);
-
-    var resultProductDataTwo = courseCollections.filter(
-      (a) =>
-        a.secondInstallmentDate >= startDate &&
-        a.secondInstallmentDate <= endDate
-    );
-    // console.log(resultProductDataTwo)
-
-    var resultProductDataThird = courseCollections.filter(
-      (a) =>
-        a.thirdInstallmentDate >= startDate && a.thirdInstallmentDate <= endDate
-    );
-    // console.log(resultProductDataThird)
 
     const filtering = [
-      ...resultProductDataFrist,
-      ...resultProductDataTwo,
-      ...resultProductDataThird,
+      filteredData
     ];
 
-    const totalColloction = getCourseCollectionTotal(filtering);
-    setCollectionTotal(totalColloction);
+    setShow(true);
+    // console.log(resultProductDataThird)
+
+
+
+    const totalCollection = getCourseCollectionTotal(filtering,startDate,endDate);
+
+    setCollectionTotal(totalCollection);
+
+    console.log("collectionTotal is",collectionTotal);
 
     toast.success("Data filtered successfully");
   };
@@ -192,7 +186,7 @@ const ExpenseDateWiseReport = () => {
           <p className="p-1 border-2">
             {" "}
             Total Profit :{" "}
-            {collectionTotal + extraCollectionTotal - expenseTotal} BDT
+            {(collectionTotal + extraCollectionTotal) - expenseTotal} BDT
           </p>
         </div>
       </div>
