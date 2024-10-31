@@ -39,7 +39,6 @@ const ExpenseDateWiseReport = () => {
     queryKey: ["courseCollections "],
     queryFn: async () => {
       const data = await getCourseCollectionData();
-      console.log(`course collection is ${data}`)
       return data;
     },
   });

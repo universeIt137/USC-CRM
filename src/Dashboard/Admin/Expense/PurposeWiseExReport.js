@@ -65,10 +65,7 @@ const PurposeWiseExReport = () => {
 
     var totalAmount = getExpenseTotal(filterPurpose);
 
-    // var totalAmount = 0;
-    // for (var i = 0; i < filterPurpose.length; i++) {
-    //   totalAmount += filterPurpose[i].amount;
-    // }
+
     setExpenseTotal(totalAmount);
     console.log(totalAmount);
 
