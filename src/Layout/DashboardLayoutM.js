@@ -48,7 +48,7 @@ const DashboardLayoutM = () => {
               className="drawer-overlay"
             ></label>
             <div className="space-y-3">
-              <div className="flex items-center p-2 mt-1 space-x-4 justify-self-end">
+              <div className="flex items-center p-2 mt-1 space-x-4  border rounded-lg">
                 <img
                   src="https://universesoftcare.com/media/CustomerImage/Untitled-f1.jpg"
                   alt=""
@@ -69,9 +69,9 @@ const DashboardLayoutM = () => {
               </div>
               <div className="flex-1">
                 <ul className="pt-2 pb-4 space-y-1 text-sm">
-                  <UserLayout></UserLayout>
+                  {/* <UserLayout></UserLayout> */}
 
-                  <HeadLayout></HeadLayout>
+                  {/* <HeadLayout></HeadLayout> */}
 
                   <AdminLayout></AdminLayout>
 
